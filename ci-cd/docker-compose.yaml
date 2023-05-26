@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+  GPTutorBot:
+    image: ${DOCKER_HUB_USERNAME}/${APP_IMAGE}:${TAG}
+    container_name: ${APP_IMAGE}
+    environment:
+      - TZ=Europe/Moscow
+      - TELEGRAM_TOKEN
+      - CHAT_GPT_API_KEY
+      - UMONEY_WALLET
+      - KEY_PAYMENT
+      - IP
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /GPTutorBot-config/db:/GPTutorBot/db
+      - /GPTutorBot-config/certs:/GPTutorBot/certs

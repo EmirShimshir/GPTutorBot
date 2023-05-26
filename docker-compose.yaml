@@ -1,0 +1,18 @@
+version: "3.3"
+
+services:
+  GPTutorBot:
+    image: "gptutor-bot"
+    build:
+      context: .
+      dockerfile: dockerfile
+    environment:
+      - TZ=Europe/Moscow
+    env_file:
+      - .env
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /GPTutorBot-config/db:/GPTutorBot/db
+      - /GPTutorBot-config/certs:/GPTutorBot/certs
