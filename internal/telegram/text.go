@@ -31,6 +31,10 @@ func (b *Bot) handleText(text string, chatID int64) error {
 		return b.handleActivatePromo(text, chatID)
 	}
 
+	if b.services.IsGift(text) {
+		return b.handleActivateGift(chatID)
+	}
+
 	return b.handleRawText(text, chatID)
 }
 

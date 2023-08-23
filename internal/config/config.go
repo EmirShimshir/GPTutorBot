@@ -23,6 +23,7 @@ type Repo struct {
 }
 
 type Promo struct {
+	Gift           string `mapstructure:"gift"`
 	Start          string `mapstructure:"start"`
 	CountReqFriend int64  `mapstructure:"count_req_friend"`
 	CountReqAuthor int64  `mapstructure:"count_req_author"`

@@ -3,7 +3,8 @@ repo:
   urls_base_path: "./db/urls"
 
 promo:
-  start: "GPTutor:"
+  gift: "POSVYAT"
+  start: "free:"
   count_req_friend: 5
   count_req_author: 3
 
