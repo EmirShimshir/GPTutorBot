@@ -6,7 +6,6 @@ services:
     container_name: ${APP_IMAGE}
     environment:
       - TZ=Europe/Moscow
-
       - TELEGRAM_TOKEN
       - CHAT_GPT_API_KEY
       - UMONEY_WALLET
