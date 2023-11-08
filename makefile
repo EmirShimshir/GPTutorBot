@@ -1,6 +1,7 @@
 include .env
 export
 
+
 build:
 	go build -o ./.bin/bot cmd/bot/main.go
 
