@@ -39,7 +39,7 @@ func (b *Bot) handleText(text string, chatID int64) error {
 }
 
 func (b *Bot) handleRawText(text string, chatID int64) error {
-	action := tgbotapi.ChatActionConfig{BaseChat: tgbotapi.BaseChat{ChatID: chatID}, Action: "typing"}
+	action := tgbotapi.ChatActionConfig{tgbotapi.BaseChat{ChatID: chatID}, "typing"}
 	_, err := b.botApi.Request(action)
 	if err != nil {
 		return err
