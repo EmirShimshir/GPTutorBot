@@ -12,5 +12,4 @@ jobs:
         host: ${{ secrets.IP }}
         username: ${{ secrets.SERVER_USERNAME }}
         key: ${{ secrets.SSHKEY }}
-        port: ${{ secrets.PORT }}
         script: whoami
