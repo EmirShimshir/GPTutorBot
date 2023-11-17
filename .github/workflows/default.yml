@@ -40,7 +40,6 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     needs: build-and-push
 
     steps:
@@ -64,6 +63,7 @@ jobs:
           host: ${{ secrets.IP  }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSHKEY }}
+          command_timeout: 90m
           script: |
             export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
             export CHAT_GPT_API_KEY="${{ secrets.CHAT_GPT_API_KEY }}"
