@@ -76,7 +76,7 @@ jobs:
             export TAG="${{ env.TAG }}"
             
             cd ~/app/ci-cd
-            docker-compose -f docker-compose.yaml stop
-            docker-compose -f docker-compose.yaml pull
-            docker-compose -f docker-compose.yaml up -d
+            docker compose -f docker-compose.yaml stop
+            docker compose -f docker-compose.yaml pull
+            docker compose -f docker-compose.yaml up -d
             docker image prune -f --filter="dangling=true"

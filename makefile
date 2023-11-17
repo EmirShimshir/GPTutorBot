@@ -17,4 +17,4 @@ start-container:
 	docker run --env-file .env -p 80:80 -p 443:443 -e TZ=Europe/Moscow -v /GPTutorBot-config/db:/GPTutorBot/db -v /GPTutorBot-config/certs:/GPTutorBot/certs gptutor-bot
 
 up:
-	docker-compose up -d
+	docker compose up -d
