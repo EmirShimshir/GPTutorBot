@@ -2,7 +2,7 @@ package service
 
 import (
 	log "github.com/sirupsen/logrus"
-	"errors"
+	"fmt"
 )
 
 func (s *Service) ProcessTask(text string, chatID int64) (string, error) {
@@ -25,7 +25,7 @@ func (s *Service) ProcessTask(text string, chatID int64) (string, error) {
 
 	result, err := s.chatGpt.MakeRequest(text)
 	if err != nil {
-		return "", errors.Wrap(err, "MakeRequest/n" + result)
+		return "", fmt.Errorf("%s MakeRequest/n%s", result, err.Error())
 	}
 
 	if !s.IsSubscriberUser(user) {
