@@ -54,7 +54,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSHKEY }}
           source: "./ci-cd"
-          target: "/app"
+          target: "~/app"
           strip_components: 1
 
       - name: Deploy ssh
@@ -75,7 +75,7 @@ jobs:
             export APP_IMAGE="${{ env.APP_IMAGE }}"
             export TAG="${{ env.TAG }}"
             
-            cd /app/ci-cd
+            cd ~/app/ci-cd
             docker-compose -f docker-compose.yaml stop
             docker-compose -f docker-compose.yaml pull
             docker-compose -f docker-compose.yaml up -d

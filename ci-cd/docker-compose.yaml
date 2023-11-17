@@ -15,5 +15,5 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - /GPTutorBot-config/db:/GPTutorBot/db
-      - /GPTutorBot-config/certs:/GPTutorBot/certs
+      - ~/GPTutorBot-config/db:/GPTutorBot/db
+      - ~/GPTutorBot-config/certs:/GPTutorBot/certs
