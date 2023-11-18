@@ -160,12 +160,27 @@ func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 		return invalidCommandError
 	}
 
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SendAll), "", 1)
+
+	// send to admin
+	msg := tgbotapi.NewMessage(chatID, text)
+	msg.ParseMode = "Markdown"
+	_, err := b.botApi.Send(msg)
+	if err != nil {
+		log.Error(fmt.Sprintf("err sendAll to id: %d", chatID), err)
+		return err
+	}
+	log.WithFields(log.Fields{
+		"chatID": chatID,
+		"status": "OK",
+	}).Info("handleSendAllCommand to admin")
+
 	chatIDs, err := b.services.GetUsersAllChatID()
 	if err != nil {
 		return err
 	}
 
-	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SendAll), "", 1)
+	// send all
 	for _, chatID := range chatIDs {
 		msg := tgbotapi.NewMessage(chatID, text)
 		msg.ParseMode = "Markdown"
