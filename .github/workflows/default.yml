@@ -34,7 +34,7 @@ jobs:
         with:
           host: ${{ secrets.IP  }}
           username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSHKEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           command_timeout: 90m
           script: |
             export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
