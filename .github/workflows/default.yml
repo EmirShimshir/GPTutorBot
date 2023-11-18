@@ -10,9 +10,37 @@ env:
   TAG: latest
 
 jobs:
+  build-and-push:
+    name: Build and Push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+        with:
+          ref: main
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Push to Docker Hub app image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.APP_IMAGE }}:${{ env.TAG }}
+
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
+    needs: build-and-push
 
     steps:
       - name: Check out the repo
@@ -26,7 +54,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSHKEY }}
           source: "./ci-cd"
-          target: "~/app"
+          target: "/app"
           strip_components: 1
 
       - name: Deploy ssh
@@ -47,8 +75,8 @@ jobs:
             export APP_IMAGE="${{ env.APP_IMAGE }}"
             export TAG="${{ env.TAG }}"
 
-            cd ~/app/ci-cd
-            docker compose -f docker-compose.yaml stop
-            docker compose -f docker-compose.yaml pull
-            docker compose -f docker-compose.yaml up -d
+            cd /app/ci-cd
+            docker-compose -f docker-compose.yaml stop
+            docker-compose -f docker-compose.yaml pull
+            docker-compose -f docker-compose.yaml up -d
             docker image prune -f --filter="dangling=true"
