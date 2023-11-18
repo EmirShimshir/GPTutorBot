@@ -10,8 +10,6 @@ env:
   TAG: latest
 
 jobs:
-  
-
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
@@ -26,9 +24,9 @@ jobs:
         with:
           host: ${{ secrets.IP }}
           username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
+          key: ${{ secrets.SSHKEY }}
           source: "./ci-cd"
-          target: "/app"
+          target: "~/app"
           strip_components: 1
 
       - name: Deploy ssh
@@ -36,7 +34,7 @@ jobs:
         with:
           host: ${{ secrets.IP  }}
           username: ${{ secrets.SERVER_USERNAME }}
-          password: ${{ secrets.SERVER_PASSWORD }}
+          key: ${{ secrets.SSHKEY }}
           command_timeout: 90m
           script: |
             export TELEGRAM_TOKEN="${{ secrets.TELEGRAM_TOKEN }}"
@@ -49,7 +47,7 @@ jobs:
             export APP_IMAGE="${{ env.APP_IMAGE }}"
             export TAG="${{ env.TAG }}"
 
-            cd /app/ci-cd
+            cd ~/app/ci-cd
             docker-compose -f docker-compose.yaml stop
             docker-compose -f docker-compose.yaml pull
             docker-compose -f docker-compose.yaml up -d
