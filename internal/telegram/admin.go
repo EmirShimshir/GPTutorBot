@@ -3,6 +3,7 @@ package telegram
 import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"strconv"
 	"strings"
@@ -168,9 +169,20 @@ func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 	for _, chatID := range chatIDs {
 		msg := tgbotapi.NewMessage(chatID, text)
 		msg.ParseMode = "Markdown"
-		_, _ = b.botApi.Send(msg)
+		_, err = b.botApi.Send(msg)
+		if err != nil {
+			log.Error(fmt.Sprintf("err sendAll to id: %d", chatID), err)
+			return err
+		}
+		log.WithFields(log.Fields{
+			"chatID": chatID,
+			"status": "OK",
+		}).Info("handleSendAllCommand")
 	}
 
+	log.WithFields(log.Fields{
+		"status": "done",
+	}).Info("handleSendAllCommand")
 	return nil
 }
 
