@@ -168,7 +168,6 @@ func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 	_, err := b.botApi.Send(msg)
 	if err != nil {
 		log.Error(fmt.Sprintf("err sendAll to id: %d", chatID), err)
-		return err
 	}
 	log.WithFields(log.Fields{
 		"chatID": chatID,
@@ -187,7 +186,6 @@ func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 		_, err = b.botApi.Send(msg)
 		if err != nil {
 			log.Error(fmt.Sprintf("err sendAll to id: %d", chatID), err)
-			return err
 		}
 		log.WithFields(log.Fields{
 			"chatID": chatID,
