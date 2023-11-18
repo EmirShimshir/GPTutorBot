@@ -36,5 +36,4 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSHKEY }}
           command_timeout: 90m
-          script: |
-            whoami
+          script: whoami
