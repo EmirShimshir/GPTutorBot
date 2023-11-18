@@ -26,7 +26,7 @@ jobs:
         with:
           host: ${{ secrets.IP }}
           username: ${{ secrets.SERVER_USERNAME }}
-          key: ${{ secrets.SSHKEY }}
+          password: ${{ secrets.SERVER_PASSWORD }}
           source: "./ci-cd"
           target: "/app"
           strip_components: 1
