@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
 )
@@ -25,10 +26,31 @@ func (b *Bot) handleCallback(callback *tgbotapi.CallbackQuery) error {
 }
 
 func (b *Bot) handleBuyRequests(chatID int64) error {
-	msg := tgbotapi.NewMessage(chatID, b.cfg.Messages.Responses.BuyRequests)
+	count, err := b.services.GetSales()
+	if err != nil {
+		return err
+	}
+
+	var text string
+
+	if count > 0 {
+		count, err := b.services.GetSales()
+		if err != nil {
+			return err
+		}
+		text = fmt.Sprintf(b.cfg.Messages.Responses.BuyRequestsSales, count)
+		fmt.Println(text)
+
+	} else {
+		text = b.cfg.Messages.Responses.BuyRequests
+
+	}
+
+	msg := tgbotapi.NewMessage(chatID, text)
 	msg.ParseMode = "Markdown"
 	msg.ReplyMarkup = b.NewShopKeyboard(chatID)
-	_, err := b.botApi.Send(msg)
+
+	_, err = b.botApi.Send(msg)
 	return err
 }
 

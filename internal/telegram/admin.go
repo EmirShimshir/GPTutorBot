@@ -199,6 +199,57 @@ func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 	return nil
 }
 
+func (b *Bot) handleGetSalesCommand(chatID int64) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	count, err := b.services.GetSales()
+	if err != nil {
+		return err
+	}
+
+	text := fmt.Sprintf("count: %d", count)
+
+	msg := tgbotapi.NewMessage(chatID, text)
+	_, err = b.botApi.Send(msg)
+
+	log.WithFields(log.Fields{
+		"msg":    text,
+		"status": "done",
+	}).Info("handleGetSalesCommand")
+	return err
+}
+
+func (b *Bot) handleSetSalesCommand(chatID int64, text string) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SetSales), "", 1)
+
+	count, err := strconv.ParseInt(text, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	err = b.services.SetSales(count)
+	if err != nil {
+		return err
+	}
+
+	text = fmt.Sprintf("seted: %d", count)
+
+	msg := tgbotapi.NewMessage(chatID, text)
+	_, err = b.botApi.Send(msg)
+
+	log.WithFields(log.Fields{
+		"msg":    count,
+		"status": "done",
+	}).Info("handleSetSalesCommand")
+	return err
+}
+
 func (b *Bot) isAdmin(chatID int64) bool {
 	for _, adminId := range b.cfg.AdminsId {
 		if chatID == adminId {

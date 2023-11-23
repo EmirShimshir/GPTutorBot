@@ -1,9 +1,10 @@
 repo:
   users_base_path: "./db/users"
   urls_base_path: "./db/urls"
+  sales_base_path: "./db/sales"
 
 promo:
-  gift: "POSVYAT"
+  gift: "Pa6JLqcTizErWYFM"
   start: "free:"
   count_req_friend: 5
   count_req_author: 3
@@ -37,6 +38,12 @@ bot:
     product_price_01: 295
     product_price_02: 749
     product_price_03: 1190
+    product_sales_price_01: 99
+    product_sales_price_02: 249
+    product_sales_price_03: 399
+    product_base_price_01: 295
+    product_base_price_02: 749
+    product_base_price_03: 1190
     product_count_01: 1
     product_count_02: 3
     product_count_03: 6
@@ -90,6 +97,17 @@ bot:
         После оплаты проверь свой баланс.
         
         Остались вопросы? - обратись к разработчику @Emir\_Shimshir
+
+      buy_requests_sales: |
+        Чтобы пользоваться *GPTutor* без задержек и ограничений — оформи подписку 💎
+        
+        *АКЦИЯ!* Скидка *70%%* все виды подписок!
+        
+        _Подписок по специальной цене осталось:_ *%d*
+
+        После оплаты проверь свой баланс.
+
+        Остались вопросы? - обратись к разработчику @Emir\_Shimshir
       image: |
         Отправь изображение картинкой или файлом
       task: |
@@ -112,7 +130,11 @@ bot:
         /deleteUser ChatID
         /deleteUrl Utm
         
-        /sendAll message [*blod*] [_italics_] [[text](url)]
+        /sendAll message [*blod*] [_italics_] [[text](url)] [~snake~]
+        
+        /setSales count
+        /getSales
+        
 
       admin_db_users: "Формат вывода - Name;ChatId;Balance;day.month.year;UsedPromo\n\n"
 
@@ -221,6 +243,8 @@ bot:
     delete_user: "deleteUser"
     delete_url: "deleteUrl"
     send_all: "sendAll"
+    set_sales: "setSales"
+    get_sales: "getSales"
 
 server:
   port: 80
