@@ -3,8 +3,8 @@ package tesseract
 import (
 	"github.com/EmirShimshir/tasker-bot/internal/config"
 	"github.com/otiai10/gosseract/v2"
-	log "github.com/sirupsen/logrus"
 	"io"
+	"log"
 	"net/http"
 	"os"
 )
