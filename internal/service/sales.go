@@ -24,6 +24,10 @@ func (s *Service) SetSales(count int64)  {
 	}
 
 	s.payment.Products.SalesCount = count
+
+	log.WithFields(log.Fields{
+		"sales now": count,
+	}).Info("SetSales")
 }
 
 
