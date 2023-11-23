@@ -20,7 +20,6 @@ type Config struct {
 type Repo struct {
 	UsersBasePath string `mapstructure:"users_base_path"`
 	UrlsBasePath  string `mapstructure:"urls_base_path"`
-	SalesBasePath string `mapstructure:"sales_base_path"`
 }
 
 type Promo struct {

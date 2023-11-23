@@ -1,7 +1,6 @@
 repo:
   users_base_path: "./db/users"
   urls_base_path: "./db/urls"
-  sales_base_path: "./db/sales"
 
 promo:
   gift: "Pa6JLqcTizErWYFM"
