@@ -166,6 +166,7 @@ type Commands struct {
 	DeleteUser string `mapstructure:"delete_user"`
 	DeleteUrl  string `mapstructure:"delete_url"`
 	SendAll    string `mapstructure:"send_all"`
+	SendAllBuy string `mapstructure:"send_all_buy"`
 	SetSales   string `mapstructure:"set_sales"`
 	GetSales   string `mapstructure:"Get_sales"`
 }

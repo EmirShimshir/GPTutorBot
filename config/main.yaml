@@ -102,7 +102,7 @@ bot:
       buy_requests_sales: |
         Чтобы пользоваться *GPTutor* без задержек и ограничений — оформи подписку 💎
         
-        *АКЦИЯ!* Скидка *70%%* все виды подписок!
+        🔥 *АКЦИЯ!* Скидка *70%%* все виды подписок! 🔥
         
         _Подписок по специальной цене осталось:_ *%d*
 
@@ -131,7 +131,8 @@ bot:
         /deleteUser ChatID
         /deleteUrl Utm
         
-        /sendAll message [*blod*] [_italics_] [[text](url)] [~snake~]
+        /sendAll message [*blod*] [_italics_] [[text](url)] 
+        /sendAllBuy message [*blod*] [_italics_] [[text](url)] 
         
         /setSales count
         /getSales
@@ -244,6 +245,7 @@ bot:
     delete_user: "deleteUser"
     delete_url: "deleteUrl"
     send_all: "sendAll"
+    send_all_buy: "sendAllBuy"
     set_sales: "setSales"
     get_sales: "getSales"
 

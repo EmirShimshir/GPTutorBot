@@ -43,6 +43,14 @@ func (b *Bot) NewBalanceKeyboard() tgbotapi.InlineKeyboardMarkup {
 	)
 }
 
+func (b *Bot) NewSalesKeyboard() tgbotapi.InlineKeyboardMarkup {
+	return tgbotapi.NewInlineKeyboardMarkup(
+		tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData("🔔 АКЦИЯ! 🔔", b.cfg.Keyboard.Balance.Buy),
+		),
+	)
+}
+
 func (b *Bot) NewAdviceKeyboard() tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
