@@ -155,6 +155,52 @@ func (b *Bot) handleDeleteUrlCommand(chatID int64, text string) error {
 	return b.services.DeleteUrl(utm)
 }
 
+func (b *Bot) handleSendAllBuyCommand(chatID int64, text string) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SendAllBuy), "", 1)
+
+	// send to admin
+	msg := tgbotapi.NewMessage(chatID, text)
+	msg.ParseMode = "Markdown"
+	msg.ReplyMarkup = b.NewSalesKeyboard()
+	_, err := b.botApi.Send(msg)
+	if err != nil {
+		log.Error(fmt.Sprintf("err sendAll to id: %d", chatID), err)
+	}
+	log.WithFields(log.Fields{
+		"chatID": chatID,
+		"status": "OK",
+	}).Info("handleSendAllCommand to admin")
+
+	chatIDs, err := b.services.GetUsersAllChatID()
+	if err != nil {
+		return err
+	}
+
+	// send all
+	for _, chatID := range chatIDs {
+		msg := tgbotapi.NewMessage(chatID, text)
+		msg.ParseMode = "Markdown"
+		msg.ReplyMarkup = b.NewSalesKeyboard()
+		_, err = b.botApi.Send(msg)
+		if err != nil {
+			log.Error(fmt.Sprintf("err sendAll to id: %d", chatID), err)
+		}
+		log.WithFields(log.Fields{
+			"chatID": chatID,
+			"status": "OK",
+		}).Info("handleSendAllCommand")
+	}
+
+	log.WithFields(log.Fields{
+		"status": "done",
+	}).Info("handleSendAllCommand")
+	return nil
+}
+
 func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 	if !b.isAdmin(chatID) {
 		return invalidCommandError
@@ -197,6 +243,51 @@ func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 		"status": "done",
 	}).Info("handleSendAllCommand")
 	return nil
+}
+
+func (b *Bot) handleGetSalesCommand(chatID int64) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	count := b.services.GetSales()
+
+	text := fmt.Sprintf("count: %d", count)
+
+	msg := tgbotapi.NewMessage(chatID, text)
+	_, err := b.botApi.Send(msg)
+
+	log.WithFields(log.Fields{
+		"msg":    text,
+		"status": "done",
+	}).Info("handleGetSalesCommand")
+	return err
+}
+
+func (b *Bot) handleSetSalesCommand(chatID int64, text string) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SetSales), "", 1)
+
+	count, err := strconv.ParseInt(text, 10, 64)
+	if err != nil {
+		return err
+	}
+
+	b.services.SetSales(count)
+
+	text = fmt.Sprintf("seted: %d", count)
+
+	msg := tgbotapi.NewMessage(chatID, text)
+	_, err = b.botApi.Send(msg)
+
+	log.WithFields(log.Fields{
+		"msg":    count,
+		"status": "done",
+	}).Info("handleSetSalesCommand")
+	return err
 }
 
 func (b *Bot) isAdmin(chatID int64) bool {

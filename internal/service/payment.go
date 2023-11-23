@@ -8,7 +8,15 @@ import (
 	"strings"
 )
 
-func (s *Service) GenerateURL(chatID int64, countBought int64, price int64) string {
+func (s *Service) GenerateURLs(chatID int64) (string, string, string) {
+	url01 := s.generateURL(chatID, s.payment.Products.ProductCount01, s.payment.Products.ProductPrice01)
+	url02 := s.generateURL(chatID, s.payment.Products.ProductCount02, s.payment.Products.ProductPrice02)
+	url03 := s.generateURL(chatID, s.payment.Products.ProductCount03, s.payment.Products.ProductPrice03)
+
+	return url01, url02, url03
+}
+
+func (s *Service) generateURL(chatID int64, countBought int64, price int64) string {
 	base := url.URL{
 		Scheme: s.payment.URL.Scheme,
 		Host:   s.payment.URL.Host,
@@ -40,7 +48,16 @@ func (s *Service) GenerateURL(chatID int64, countBought int64, price int64) stri
 	return resURL
 }
 
-func (s *Service) GenerateProduct(countBought int64, price int64) string {
+func (s *Service) GenerateProducts() (string, string, string) {
+	product01 := s.generateProduct(s.payment.Products.ProductCount01, s.payment.Products.ProductPrice01)
+	product02 := s.generateProduct(s.payment.Products.ProductCount02, s.payment.Products.ProductPrice02)
+	product03 := s.generateProduct(s.payment.Products.ProductCount03, s.payment.Products.ProductPrice03)
+
+	return product01, product02, product03
+}
+
+
+func (s *Service) generateProduct(countBought int64, price int64) string {
 	return fmt.Sprintf(s.payment.Message, countBought, price)
 }
 
@@ -85,5 +102,12 @@ func (s *Service) ProcessPayment(uEnc string, paidSum string) {
 			"err": err,
 		}).Error("UpdateBalance")
 		return
+	}
+
+	count := s.GetSales()
+
+	if count > 0 {
+		count--
+		s.SetSales(count)
 	}
 }

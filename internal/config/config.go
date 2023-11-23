@@ -61,19 +61,25 @@ type Bot struct {
 
 	StartBalance int64   `mapstructure:"start_balance"`
 	AdminsId     []int64 `mapstructure:"admins_id"`
-	Shop         Shop
 	Messages     Messages
 	Keyboard     Keyboard
 	Commands     Commands
 }
 
 type Shop struct {
-	ProductPrice01 int64 `mapstructure:"product_price_01"`
-	ProductPrice02 int64 `mapstructure:"product_price_02"`
-	ProductPrice03 int64 `mapstructure:"product_price_03"`
-	ProductCount01 int64 `mapstructure:"product_count_01"`
-	ProductCount02 int64 `mapstructure:"product_count_02"`
-	ProductCount03 int64 `mapstructure:"product_count_03"`
+	ProductPrice01      int64 `mapstructure:"product_price_01"`
+	ProductPrice02      int64 `mapstructure:"product_price_02"`
+	ProductPrice03      int64 `mapstructure:"product_price_03"`
+	ProductSalesPrice01 int64 `mapstructure:"product_sales_price_01"`
+	ProductSalesPrice02 int64 `mapstructure:"product_sales_price_02"`
+	ProductSalesPrice03 int64 `mapstructure:"product_sales_price_03"`
+	ProductBasePrice01  int64 `mapstructure:"product_base_price_01"`
+	ProductBasePrice02  int64 `mapstructure:"product_base_price_02"`
+	ProductBasePrice03  int64 `mapstructure:"product_base_price_03"`
+	ProductCount01      int64 `mapstructure:"product_count_01"`
+	ProductCount02      int64 `mapstructure:"product_count_02"`
+	ProductCount03      int64 `mapstructure:"product_count_03"`
+	SalesCount int64 `mapstructure:"sales_count"`
 }
 
 type Messages struct {
@@ -82,29 +88,30 @@ type Messages struct {
 }
 
 type Responses struct {
-	Start         string `mapstructure:"start"`
-	Help          string `mapstructure:"help"`
-	BuyRequests   string `mapstructure:"buy_requests"`
-	Balance       string `mapstructure:"balance"`
-	Subscribe     string `mapstructure:"subscribe"`
-	Image         string `mapstructure:"image"`
-	Task          string `mapstructure:"task"`
-	TextGot       string `mapstructure:"got_text"`
-	ImageGot      string `mapstructure:"got_image"`
-	Admin         string `mapstructure:"admin"`
-	AdminDbUsers  string `mapstructure:"admin_db_users"`
-	AdminDbUrls   string `mapstructure:"admin_db_urls"`
-	AdviceButton  string `mapstructure:"advice_button"`
-	AdviceStart   string `mapstructure:"advice_start"`
-	Advice01      string `mapstructure:"advice01"`
-	Advice02      string `mapstructure:"advice02"`
-	Advice03      string `mapstructure:"advice03"`
-	Advice04      string `mapstructure:"advice04"`
-	Promo         string `mapstructure:"promo"`
-	PromoOK       string `mapstructure:"promo_ok"`
-	CreatePromo01 string `mapstructure:"create_promo01"`
-	CreatePromo02 string `mapstructure:"create_promo02"`
-	CreatePromo03 string `mapstructure:"create_promo03"`
+	Start            string `mapstructure:"start"`
+	Help             string `mapstructure:"help"`
+	BuyRequests      string `mapstructure:"buy_requests"`
+	BuyRequestsSales string `mapstructure:"buy_requests_sales"`
+	Balance          string `mapstructure:"balance"`
+	Subscribe        string `mapstructure:"subscribe"`
+	Image            string `mapstructure:"image"`
+	Task             string `mapstructure:"task"`
+	TextGot          string `mapstructure:"got_text"`
+	ImageGot         string `mapstructure:"got_image"`
+	Admin            string `mapstructure:"admin"`
+	AdminDbUsers     string `mapstructure:"admin_db_users"`
+	AdminDbUrls      string `mapstructure:"admin_db_urls"`
+	AdviceButton     string `mapstructure:"advice_button"`
+	AdviceStart      string `mapstructure:"advice_start"`
+	Advice01         string `mapstructure:"advice01"`
+	Advice02         string `mapstructure:"advice02"`
+	Advice03         string `mapstructure:"advice03"`
+	Advice04         string `mapstructure:"advice04"`
+	Promo            string `mapstructure:"promo"`
+	PromoOK          string `mapstructure:"promo_ok"`
+	CreatePromo01    string `mapstructure:"create_promo01"`
+	CreatePromo02    string `mapstructure:"create_promo02"`
+	CreatePromo03    string `mapstructure:"create_promo03"`
 }
 
 type Errors struct {
@@ -158,6 +165,9 @@ type Commands struct {
 	DeleteUser string `mapstructure:"delete_user"`
 	DeleteUrl  string `mapstructure:"delete_url"`
 	SendAll    string `mapstructure:"send_all"`
+	SendAllBuy string `mapstructure:"send_all_buy"`
+	SetSales   string `mapstructure:"set_sales"`
+	GetSales   string `mapstructure:"Get_sales"`
 }
 
 type Server struct {
@@ -229,11 +239,6 @@ func unmarshal(cfg *Config) error {
 	}
 
 	err = viper.UnmarshalKey("bot", &cfg.Bot)
-	if err != nil {
-		return err
-	}
-
-	err = viper.UnmarshalKey("bot.shop", &cfg.Bot.Shop)
 	if err != nil {
 		return err
 	}
