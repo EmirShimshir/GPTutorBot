@@ -26,21 +26,11 @@ func (b *Bot) handleCallback(callback *tgbotapi.CallbackQuery) error {
 }
 
 func (b *Bot) handleBuyRequests(chatID int64) error {
-	count, err := b.services.GetSales()
-	if err != nil {
-		return err
-	}
-
+	count := b.services.GetSales()
 	var text string
 
 	if count > 0 {
-		count, err := b.services.GetSales()
-		if err != nil {
-			return err
-		}
 		text = fmt.Sprintf(b.cfg.Messages.Responses.BuyRequestsSales, count)
-		fmt.Println(text)
-
 	} else {
 		text = b.cfg.Messages.Responses.BuyRequests
 
@@ -50,7 +40,7 @@ func (b *Bot) handleBuyRequests(chatID int64) error {
 	msg.ParseMode = "Markdown"
 	msg.ReplyMarkup = b.NewShopKeyboard(chatID)
 
-	_, err = b.botApi.Send(msg)
+	_, err := b.botApi.Send(msg)
 	return err
 }
 

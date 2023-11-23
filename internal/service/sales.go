@@ -4,18 +4,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-func (s *Service) GetSales() (int64, error) {
+func (s *Service) GetSales() int64 {
 	log.Info("GetSales")
 
-	count, err := s.repo.Sales.Get()
-	if err != nil {
-		return 0, err
-	}
-
-	return count, nil
+	return s.payment.Products.SalesCount
 }
 
-func (s *Service) SetSales(count int64) error {
+func (s *Service) SetSales(count int64)  {
 	log.Info("SetSales")
 
 	if count > 0 {
@@ -28,12 +23,7 @@ func (s *Service) SetSales(count int64) error {
 		s.payment.Products.ProductPrice03 = s.payment.Products.ProductBasePrice03
 	}
 
-	err := s.repo.Sales.Save(count)
-	if err != nil {
-		return err
-	}
-
-	return nil
+	s.payment.Products.SalesCount = count
 }
 
 

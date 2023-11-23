@@ -21,21 +21,14 @@ type URLs interface {
 	Exists(utm string) (bool, error)
 	Delete(utm string) error
 }
-
-type Sales interface {
-	Save(count int64) error
-	Get() (int64, error)
-}
 type Repositories struct {
 	Users Users
 	URLs  URLs
-	Sales Sales
 }
 
 func NewRepositories(repo config.Repo) *Repositories {
 	return &Repositories{
 		Users: files.NewUsersRepo(repo),
 		URLs:  files.NewUrlsRepo(repo),
-		Sales: files.NewSalesRepo(repo),
 	}
 }

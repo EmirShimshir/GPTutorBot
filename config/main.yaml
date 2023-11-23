@@ -47,6 +47,7 @@ bot:
     product_count_01: 1
     product_count_02: 3
     product_count_03: 6
+    sales_count: 0
 
   messages:
     response:

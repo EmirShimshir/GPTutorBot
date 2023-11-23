@@ -104,22 +104,10 @@ func (s *Service) ProcessPayment(uEnc string, paidSum string) {
 		return
 	}
 
-	count, err := s.GetSales()
-	if err != nil {
-		log.WithFields(log.Fields{
-			"err": err,
-		}).Error("GetSales")
-		return
-	}
+	count := s.GetSales()
 
 	if count > 0 {
 		count--
-		err = s.SetSales(count)
-		if err != nil {
-			log.WithFields(log.Fields{
-				"err": err,
-			}).Error("GetSales")
-			return
-		}
+		s.SetSales(count)
 	}
 }

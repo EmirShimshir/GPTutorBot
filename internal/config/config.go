@@ -80,6 +80,7 @@ type Shop struct {
 	ProductCount01      int64 `mapstructure:"product_count_01"`
 	ProductCount02      int64 `mapstructure:"product_count_02"`
 	ProductCount03      int64 `mapstructure:"product_count_03"`
+	SalesCount int64 `mapstructure:"sales_count"`
 }
 
 type Messages struct {

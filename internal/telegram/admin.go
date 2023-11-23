@@ -204,15 +204,12 @@ func (b *Bot) handleGetSalesCommand(chatID int64) error {
 		return invalidCommandError
 	}
 
-	count, err := b.services.GetSales()
-	if err != nil {
-		return err
-	}
+	count := b.services.GetSales()
 
 	text := fmt.Sprintf("count: %d", count)
 
 	msg := tgbotapi.NewMessage(chatID, text)
-	_, err = b.botApi.Send(msg)
+	_, err := b.botApi.Send(msg)
 
 	log.WithFields(log.Fields{
 		"msg":    text,
@@ -233,10 +230,7 @@ func (b *Bot) handleSetSalesCommand(chatID int64, text string) error {
 		return err
 	}
 
-	err = b.services.SetSales(count)
-	if err != nil {
-		return err
-	}
+	b.services.SetSales(count)
 
 	text = fmt.Sprintf("seted: %d", count)
 
