@@ -36,12 +36,12 @@ func (s *Service) ActivateGift(chatID int64) error {
 
 	diff := now.Sub(user.DateSub)
 
-	countGift := 1
+	countGift := 7
 
 	if diff > 0 {
-		user.DateSub = now.AddDate(0, countGift, 0)
+		user.DateSub = now.AddDate(0, 0, countGift)
 	} else {
-		user.DateSub = user.DateSub.AddDate(0, countGift, 0)
+		user.DateSub = user.DateSub.AddDate(0, 0, countGift)
 	}
 
 	return s.repo.Users.Save(user)

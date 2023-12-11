@@ -201,6 +201,50 @@ func (b *Bot) handleSendAllBuyCommand(chatID int64, text string) error {
 	return nil
 }
 
+func (b *Bot) handleSendAllZerosCommand(chatID int64, text string) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SendAllZeros), "", 1)
+
+	// send to admin
+	msg := tgbotapi.NewMessage(chatID, text)
+	msg.ParseMode = "Markdown"
+	_, err := b.botApi.Send(msg)
+	if err != nil {
+		log.Error(fmt.Sprintf("err SendAllZeros to id: %d", chatID), err)
+	}
+	log.WithFields(log.Fields{
+		"chatID": chatID,
+		"status": "OK",
+	}).Info("handleSendAllZerosCommand to admin")
+
+	chatIDs, err := b.services.GetUsersZeroChatID()
+	if err != nil {
+		return err
+	}
+
+	// send all
+	for _, chatID := range chatIDs {
+		msg := tgbotapi.NewMessage(chatID, text)
+		msg.ParseMode = "Markdown"
+		_, err = b.botApi.Send(msg)
+		if err != nil {
+			log.Error(fmt.Sprintf("err SendAllZeros to id: %d", chatID), err)
+		}
+		log.WithFields(log.Fields{
+			"chatID": chatID,
+			"status": "OK",
+		}).Info("handleSendAllZerosCommand")
+	}
+
+	log.WithFields(log.Fields{
+		"status": "done",
+	}).Info("handleSendAllZerosCommand")
+	return nil
+}
+
 func (b *Bot) handleSendAllCommand(chatID int64, text string) error {
 	if !b.isAdmin(chatID) {
 		return invalidCommandError

@@ -209,6 +209,34 @@ func (s *Service) GetUsersAllChatID() ([]int64, error) {
 	return ChatIDs, nil
 }
 
+func (s *Service) GetUsersZeroChatID() ([]int64, error) {
+	log.Info("GetAllChatID")
+
+	usersAll, err := s.repo.Users.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	ChatIDs := make([]int64, 0, 1)
+
+	now := time.Now()
+
+	for i := 0; i < len(usersAll); i++ {
+		diff := now.Sub(usersAll[i].DateSub)
+		if diff > 0 && usersAll[i].Balance == 0 {
+			if usersAll[i].UsedPromo == true {
+				usersAll[i].UsedPromo = false
+				if err := s.repo.Users.Save(usersAll[i]); err != nil {
+					return nil, err
+				}
+			}
+			ChatIDs = append(ChatIDs, usersAll[i].ChatID)
+		}
+	}
+
+	return ChatIDs, nil
+}
+
 func (s *Service) DeleteUser(chatID int64) error {
 	log.Info("DeleteUser")
 

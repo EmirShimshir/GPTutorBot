@@ -132,6 +132,7 @@ bot:
         
         /sendAll message [*blod*] [_italics_] [[text](url)] 
         /sendAllBuy message [*blod*] [_italics_] [[text](url)] 
+        /sendAllZeros message [*blod*] [_italics_] [[text](url)] 
         
         /setSales count
         /getSales
@@ -245,6 +246,7 @@ bot:
     delete_url: "deleteUrl"
     send_all: "sendAll"
     send_all_buy: "sendAllBuy"
+    send_all_zeros: "sendAllZeros"
     set_sales: "setSales"
     get_sales: "getSales"
 

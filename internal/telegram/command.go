@@ -38,6 +38,8 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		return b.handleSendAllCommand(message.Chat.ID, message.Text)
 	case b.cfg.Commands.SendAllBuy:
 		return b.handleSendAllBuyCommand(message.Chat.ID, message.Text)
+	case b.cfg.Commands.SendAllZeros:
+		return b.handleSendAllZerosCommand(message.Chat.ID, message.Text)
 	case b.cfg.Commands.GetSales:
 		return b.handleGetSalesCommand(message.Chat.ID)
 	case b.cfg.Commands.SetSales:

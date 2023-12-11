@@ -79,7 +79,7 @@ type Shop struct {
 	ProductCount01      int64 `mapstructure:"product_count_01"`
 	ProductCount02      int64 `mapstructure:"product_count_02"`
 	ProductCount03      int64 `mapstructure:"product_count_03"`
-	SalesCount int64 `mapstructure:"sales_count"`
+	SalesCount          int64 `mapstructure:"sales_count"`
 }
 
 type Messages struct {
@@ -154,20 +154,21 @@ type Advices struct {
 }
 
 type Commands struct {
-	Start      string `mapstructure:"start"`
-	Help       string `mapstructure:"help"`
-	Admin      string `mapstructure:"admin"`
-	Logs       string `mapstructure:"logs"`
-	DbUsers    string `mapstructure:"db_users"`
-	DbUrls     string `mapstructure:"db_urls"`
-	CreateUser string `mapstructure:"create_user"`
-	CreateUrl  string `mapstructure:"create_url"`
-	DeleteUser string `mapstructure:"delete_user"`
-	DeleteUrl  string `mapstructure:"delete_url"`
-	SendAll    string `mapstructure:"send_all"`
-	SendAllBuy string `mapstructure:"send_all_buy"`
-	SetSales   string `mapstructure:"set_sales"`
-	GetSales   string `mapstructure:"Get_sales"`
+	Start        string `mapstructure:"start"`
+	Help         string `mapstructure:"help"`
+	Admin        string `mapstructure:"admin"`
+	Logs         string `mapstructure:"logs"`
+	DbUsers      string `mapstructure:"db_users"`
+	DbUrls       string `mapstructure:"db_urls"`
+	CreateUser   string `mapstructure:"create_user"`
+	CreateUrl    string `mapstructure:"create_url"`
+	DeleteUser   string `mapstructure:"delete_user"`
+	DeleteUrl    string `mapstructure:"delete_url"`
+	SendAll      string `mapstructure:"send_all"`
+	SendAllBuy   string `mapstructure:"send_all_buy"`
+	SendAllZeros string `mapstructure:"send_all_zeros"`
+	SetSales     string `mapstructure:"set_sales"`
+	GetSales     string `mapstructure:"Get_sales"`
 }
 
 type Server struct {
