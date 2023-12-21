@@ -17,12 +17,14 @@ var GptNewToken = errors.New("gpt new token")
 type Token struct {
 	Value string
 	Err   error
+	CntReq int64
 }
 
 func NewToken(value string, err error) *Token {
 	return &Token{
 		Value: value,
 		Err:   err,
+		CntReq: 0,
 	}
 }
 
@@ -52,7 +54,7 @@ func (c *ChatGpt) GetTokensAll() []string {
 		if el.(*Token).Err != nil {
 			errRes = el.(*Token).Err.Error()
 		}
-		res = append(res, fmt.Sprintf("%d) TOKEN: %s; ERROR: %s\n", len(tokens) - i, el.(*Token).Value, errRes))
+		res = append(res, fmt.Sprintf("%d) TOKEN: %s; ERROR: %s; CNTREQ: %d\n", len(tokens) - i, el.(*Token).Value, errRes, el.(*Token).CntReq))
 	}
 
 	return res
@@ -98,6 +100,7 @@ func (c *ChatGpt) MakeRequest(message string) (string, error) {
 	}
 
 	resp, err := c.client.CreateChatCompletion(ctx, req)
+	c.queue.Get().(*Token).CntReq++
 	if err != nil {
 		token := c.queue.Get().(*Token)
 		token.Err = err
@@ -110,6 +113,7 @@ func (c *ChatGpt) MakeRequest(message string) (string, error) {
 		c.queue.Next()
 		c.client = openai.NewClient(c.queue.Get().(*Token).Value)
 		resp, err = c.client.CreateChatCompletion(ctx, req)
+		c.queue.Get().(*Token).CntReq++
 		if err != nil {
 			token = c.queue.Get().(*Token)
 			token.Err = err
