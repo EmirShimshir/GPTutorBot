@@ -31,7 +31,7 @@ bot:
 
   start_balance: 7
 
-  admins_id: [261820904, 5128641039]
+  admins_id: [261820904]
 
   shop:
     product_price_01: 295
@@ -136,6 +136,11 @@ bot:
         
         /setSales count
         /getSales
+        
+        /getTokens 
+        /gddToken token
+        /removeToken token
+        /nextToken
         
 
       admin_db_users: "Формат вывода - Name;ChatId;Balance;day.month.year;UsedPromo\n\n"
@@ -249,6 +254,10 @@ bot:
     send_all_zeros: "sendAllZeros"
     set_sales: "setSales"
     get_sales: "getSales"
+    get_tokens: "getTokens"
+    add_tokens: "addToken"
+    remove_tokens: "removeToken"
+    next_tokens: "nextToken"
 
 server:
   port: 80

@@ -33,7 +33,6 @@ func (s *Service) getUrlsDataAll(urlsAll []*domain.Url, baseUrl string) ([]byte,
 	for _, u := range urlsAll {
 		_, err = file.WriteString(fmt.Sprintf("%s;%d -> %s?start=%s\n", u.Utm, u.CountRequests, baseUrl, u.Utm))
 		if err != nil {
-			fmt.Println(err)
 			return nil, err
 		}
 	}

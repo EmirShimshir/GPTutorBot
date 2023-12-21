@@ -3,6 +3,7 @@ package telegram
 import (
 	"errors"
 	"fmt"
+	"github.com/EmirShimshir/tasker-bot/internal/openai"
 	"github.com/EmirShimshir/tasker-bot/internal/service"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
@@ -46,10 +47,20 @@ func (b *Bot) handleRawText(text string, chatID int64) error {
 	}
 
 	result, err := b.services.ProcessTask(text, chatID)
-	if errors.Is(err, service.EmptyBalanceError) {
+	if errors.Is(err, openai.ErrGptResult) || errors.Is(err, openai.GptNewToken) {
+		AdminText := ""
+		if errors.Is(err, openai.ErrGptResult) {
+			AdminText = fmt.Sprintf("ALERT: %s", err.Error())
+		} else {
+			AdminText = fmt.Sprintf("INFO: %s", err.Error())
+		}
+		for _, adminID := range b.cfg.AdminsId {
+			msg := tgbotapi.NewMessage(adminID, AdminText)
+			_, err = b.botApi.Send(msg)
+		}
+	} else if errors.Is(err, service.EmptyBalanceError) {
 		return b.handleBalance(chatID)
-	}
-	if err != nil {
+	} else if err != nil {
 		return err
 	}
 	msg := tgbotapi.NewMessage(chatID, result)

@@ -1,10 +1,15 @@
 package service
 
 import (
+	"errors"
+	"github.com/EmirShimshir/tasker-bot/internal/openai"
 	log "github.com/sirupsen/logrus"
+	"io/ioutil"
+	"os"
 )
 
 func (s *Service) ProcessTask(text string, chatID int64) (string, error) {
+	var resErr error = nil
 	ok, err := s.repo.Users.Exists(chatID)
 	if err != nil {
 		return "", err
@@ -23,8 +28,10 @@ func (s *Service) ProcessTask(text string, chatID int64) (string, error) {
 	}
 
 	result, err := s.chatGpt.MakeRequest(text)
-	if err != nil {
+	if err != nil && !errors.Is(err, openai.ErrGptResult) && !errors.Is(err, openai.GptNewToken) {
 		return "", err
+	} else {
+		resErr = err
 	}
 
 	if !s.IsSubscriberUser(user) {
@@ -41,5 +48,42 @@ func (s *Service) ProcessTask(text string, chatID int64) (string, error) {
 		"result": result,
 	}).Info("ProcessTask")
 
-	return result, nil
+	return result, resErr
+}
+
+func (s *Service) GetTokensDataAll() ([]byte, error) {
+	log.Info("getTokensDataAll")
+	file, err := os.CreateTemp("", "")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	defer os.Remove(file.Name())
+
+	for _, string := range s.chatGpt.GetTokensAll() {
+		_, err = file.WriteString(string)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	fileData, err := ioutil.ReadFile(file.Name())
+	if err != nil {
+		return nil, err
+	}
+
+	return fileData, nil
+}
+
+func (s *Service) AddToken(token string) {
+	s.chatGpt.AddToken(token)
+}
+
+func (s *Service) RemoveToken(token string) error {
+	return s.chatGpt.RemoveToken(token)
+}
+
+func (s *Service) NextToken() {
+
+	s.chatGpt.NextToken()
 }

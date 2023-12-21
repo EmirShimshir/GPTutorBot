@@ -44,6 +44,14 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		return b.handleGetSalesCommand(message.Chat.ID)
 	case b.cfg.Commands.SetSales:
 		return b.handleSetSalesCommand(message.Chat.ID, message.Text)
+	case b.cfg.Commands.GetTokens:
+		return b.handleGetTokensCommand(message.Chat.ID)
+	case b.cfg.Commands.AddToken:
+		return b.handleAddTokenCommand(message.Chat.ID, message.Text)
+	case b.cfg.Commands.RemoveToken:
+		return b.handleRemoveTokenCommand(message.Chat.ID, message.Text)
+	case b.cfg.Commands.NextToken:
+		return b.handleNextTokenCommand(message.Chat.ID)
 	default:
 		return invalidCommandError
 	}
