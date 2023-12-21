@@ -168,7 +168,11 @@ type Commands struct {
 	SendAllBuy   string `mapstructure:"send_all_buy"`
 	SendAllZeros string `mapstructure:"send_all_zeros"`
 	SetSales     string `mapstructure:"set_sales"`
-	GetSales     string `mapstructure:"Get_sales"`
+	GetSales     string `mapstructure:"get_sales"`
+	GetTokens	 string `mapstructure:"get_tokens"`
+	AddToken	 string `mapstructure:"add_tokens"`
+	RemoveToken string `mapstructure:"remove_tokens"`
+	NextToken string `mapstructure:"next_tokens"`
 }
 
 type Server struct {

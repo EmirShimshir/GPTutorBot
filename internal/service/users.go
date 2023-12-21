@@ -143,14 +143,12 @@ func (s *Service) getUsersDataAll(usersAll []*domain.User, startMessage string) 
 
 	_, err = file.WriteString(startMessage)
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 
 	for _, u := range usersAll {
 		_, err = file.WriteString(fmt.Sprintf("@%s;%d;%d;%s;%t\n", u.Name, u.ChatID, u.Balance, u.DateSub.Format("02.01.2006"), u.UsedPromo))
 		if err != nil {
-			fmt.Println(err)
 			return nil, err
 		}
 	}

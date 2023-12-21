@@ -334,6 +334,55 @@ func (b *Bot) handleSetSalesCommand(chatID int64, text string) error {
 	return err
 }
 
+func (b *Bot) handleGetTokensCommand(chatID int64) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	data, err := b.services.GetTokensDataAll()
+	if err != nil {
+		return err
+	}
+
+	document := tgbotapi.NewDocument(chatID, tgbotapi.FileBytes{"tokens.txt", data})
+	_, err = b.botApi.Send(document)
+	return err
+}
+
+func (b *Bot) handleAddTokenCommand(chatID int64, text string) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.AddToken), "", 1)
+
+	b.services.AddToken(text)
+
+	return nil
+}
+
+func (b *Bot) handleRemoveTokenCommand(chatID int64, text string) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.RemoveToken), "", 1)
+
+	return	b.services.RemoveToken(text)
+}
+
+func (b *Bot) handleNextTokenCommand(chatID int64) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+
+	b.services.NextToken()
+
+	return nil
+}
+
+
+
 func (b *Bot) isAdmin(chatID int64) bool {
 	for _, adminId := range b.cfg.AdminsId {
 		if chatID == adminId {
