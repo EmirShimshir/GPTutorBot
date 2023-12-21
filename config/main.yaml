@@ -31,7 +31,7 @@ bot:
 
   start_balance: 7
 
-  admins_id: [261820904]
+  admins_id: [261820904, 5128641039]
 
   shop:
     product_price_01: 295

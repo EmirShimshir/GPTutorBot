@@ -5,6 +5,7 @@ go 1.19
 require (
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/gocolly/colly v1.2.0
+	github.com/otiai10/gosseract/v2 v2.4.1
 	github.com/sashabaranov/go-openai v1.5.7
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.15.0
