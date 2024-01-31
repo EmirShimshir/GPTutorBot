@@ -138,7 +138,7 @@ bot:
         /getSales
         
         /getTokens 
-        /gddToken token
+        /addToken token
         /removeToken token
         /nextToken
         

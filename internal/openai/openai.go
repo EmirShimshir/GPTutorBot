@@ -84,9 +84,7 @@ func (c *ChatGpt) NextToken() {
 	c.client = openai.NewClient(c.queue.Get().(*Token).Value)
 }
 
-
 func (c *ChatGpt) MakeRequest(message string) (string, error) {
-	var resErr error = nil
 	ctx := context.Background()
 
 	req := openai.ChatCompletionRequest{
@@ -111,27 +109,32 @@ func (c *ChatGpt) MakeRequest(message string) (string, error) {
 		}).Info("ChatGPT token error INFO")
 
 		c.queue.Next()
-		c.client = openai.NewClient(c.queue.Get().(*Token).Value)
-		resp, err = c.client.CreateChatCompletion(ctx, req)
-		c.queue.Get().(*Token).CntReq++
-		if err != nil {
-			token = c.queue.Get().(*Token)
-			token.Err = err
-
-			log.WithFields(log.Fields{
-				"token": token.Value,
-				"err": token.Err,
-			}).Info("ChatGPT token error ALERT")
-
-			c.queue.Next()
+		for token.Value != c.queue.Get().(*Token).Value {
 			c.client = openai.NewClient(c.queue.Get().(*Token).Value)
+			resp, err = c.client.CreateChatCompletion(ctx, req)
+			c.queue.Get().(*Token).CntReq++
+			if err != nil {
+				token := c.queue.Get().(*Token)
+				token.Err = err
 
-			return "", ErrGptResult
-		} else {
-			resErr = GptNewToken
+				log.WithFields(log.Fields{
+					"token": token.Value,
+					"err":   token.Err,
+				}).Info("ChatGPT token error INFO")
+			} else {
+				return resp.Choices[0].Message.Content, GptNewToken
+			}
+			c.queue.Next()
 		}
+		log.WithFields(log.Fields{
+			"token": token.Value,
+			"err": token.Err,
+		}).Info("ChatGPT token error ALERT")
+
+		return "", ErrGptResult
+
 	}
 
-	return resp.Choices[0].Message.Content, resErr
+	return resp.Choices[0].Message.Content, nil
 
 }
