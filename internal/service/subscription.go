@@ -38,6 +38,38 @@ func (s *Service) UpdateSubscription(chatID int64, countBought int64) error {
 	return s.repo.Users.Save(user)
 }
 
+func (s *Service) UpdateSubscriptionDays(chatID int64, count int64) error {
+	log.WithFields(log.Fields{
+		"chatID":      chatID,
+		"countDays": count,
+	}).Info("UpdateSubscriptionDays")
+
+	ok, err := s.repo.Users.Exists(chatID)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return NotAuthError
+	}
+
+	user, err := s.repo.Users.Get(chatID)
+	if err != nil {
+		return err
+	}
+
+	now := time.Now()
+
+	diff := now.Sub(user.DateSub)
+
+	if diff > 0 {
+		user.DateSub = now.AddDate(0, 0, int(count))
+	} else {
+		user.DateSub = user.DateSub.AddDate(0, 0, int(count))
+	}
+
+	return s.repo.Users.Save(user)
+}
+
 func (s *Service) GetSubscribeDateEnd(chatID int64) (string, error) {
 	log.WithFields(log.Fields{
 		"chatID": chatID,

@@ -20,16 +20,12 @@ func (b *Bot) handleText(text string, chatID int64) error {
 		return b.handleHelpCommand(chatID)
 	case b.cfg.Keyboard.Menu.Balance:
 		return b.handleBalance(chatID)
-	case b.cfg.Keyboard.Menu.Promo:
-		return b.handlePromo(chatID)
+	case b.cfg.Keyboard.Menu.Ref:
+		return b.handleCreateRef(chatID)
 	case b.cfg.Keyboard.Menu.ImageRecognize:
 		return b.handleImage(chatID)
 	case b.cfg.Keyboard.Menu.SolveTask:
 		return b.handleTask(chatID)
-	}
-
-	if b.services.IsPromo(text) {
-		return b.handleActivatePromo(text, chatID)
 	}
 
 	if b.services.IsGift(text) {
@@ -109,17 +105,5 @@ func (b *Bot) handleImage(chatID int64) error {
 func (b *Bot) handleTask(chatID int64) error {
 	msg := tgbotapi.NewMessage(chatID, b.cfg.Messages.Responses.Task)
 	_, err := b.botApi.Send(msg)
-	return err
-}
-
-func (b *Bot) handlePromo(chatID int64) error {
-	msg := tgbotapi.NewMessage(chatID, b.cfg.Messages.Promo)
-	msg.ParseMode = "Markdown"
-	msg.ReplyMarkup = b.NewPromoKeyboard()
-	_, err := b.botApi.Send(msg)
-	if err != nil {
-		return err
-	}
-
 	return err
 }
