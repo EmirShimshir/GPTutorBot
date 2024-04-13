@@ -17,9 +17,8 @@ func (b *Bot) handleCallback(callback *tgbotapi.CallbackQuery) error {
 		return b.handleBuyRequests(callback.Message.Chat.ID)
 	case b.cfg.Keyboard.Advices.Advice:
 		return b.handleExamples(callback.Message.Chat.ID)
-	case b.cfg.Keyboard.Promo.CreatePromo:
-		return b.handleCreatePromo(callback.Message.Chat.ID)
-
+	case b.cfg.Keyboard.Balance.Ref:
+		return b.handleCreateRef(callback.Message.Chat.ID)
 	default:
 		return InvalidCallbackError
 	}

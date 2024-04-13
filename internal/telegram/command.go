@@ -38,6 +38,8 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		return b.handleSendAllCommand(message.Chat.ID, message.Text)
 	case b.cfg.Commands.SendAllBuy:
 		return b.handleSendAllBuyCommand(message.Chat.ID, message.Text)
+	case b.cfg.Commands.SendAllRef:
+		return b.handleSendAllRefCommand(message.Chat.ID, message.Text)
 	case b.cfg.Commands.SendAllZeros:
 		return b.handleSendAllZerosCommand(message.Chat.ID, message.Text)
 	case b.cfg.Commands.GetSales:
@@ -64,10 +66,33 @@ func (b *Bot) handleStartCommand(chatID int64, userName string, text string) err
 		text = "utm_empty"
 	}
 
-	err := b.services.CreateUser(chatID, userName, b.cfg.StartBalance, text)
+	ok, err := b.services.UserExists(chatID)
 	if err != nil {
 		return err
 	}
+	if ok {
+		log.WithFields(log.Fields{
+			"chatID": chatID,
+		}).Error("User exists")
+
+	} else {
+		err := b.services.CreateUser(chatID, userName, b.cfg.StartBalance, text)
+		if err != nil {
+			return err
+		}
+		if b.services.IsRef(text) {
+			refStart, err :=  b.handleActivateRef(text, chatID)
+			if err != nil {
+				return err
+			}
+			text = refStart
+		}
+		err = b.services.UpdateUtm(text)
+		if err != nil {
+			return err
+		}
+	}
+
 
 	msg := tgbotapi.NewMessage(chatID, b.cfg.Messages.Responses.Start)
 	msg.ParseMode = "Markdown"

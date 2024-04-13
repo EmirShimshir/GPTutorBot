@@ -16,27 +16,15 @@ func (s *Service) CreateUser(chatID int64, userName string, startBalance int64, 
 	log.WithFields(log.Fields{
 		"chatID": chatID,
 		"Utm":    utm,
-	}).Info("CreateBalance")
-
-	ok, err := s.repo.Users.Exists(chatID)
-	if err != nil {
-		return err
-	}
-	if ok {
-		log.WithFields(log.Fields{
-			"chatID": chatID,
-		}).Error("balance exists")
-		return nil
-	}
-
-	err = s.UpdateUtm(utm)
-	if err != nil {
-		return err
-	}
+	}).Info("CreateUser")
 
 	newUser := domain.NewUser(userName, chatID, startBalance)
 
 	return s.repo.Users.Save(newUser)
+}
+
+func (s *Service) UserExists(chatID int64) (bool, error) {
+	return s.repo.Users.Exists(chatID)
 }
 
 func (s *Service) GetUserBalance(chatID int64) (string, error) {

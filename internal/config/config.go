@@ -23,6 +23,7 @@ type Repo struct {
 }
 
 type Promo struct {
+	BotName string `mapstructure:"bot_name"`
 	Gift           string `mapstructure:"gift"`
 	Start          string `mapstructure:"start"`
 	CountReqFriend int64  `mapstructure:"count_req_friend"`
@@ -109,9 +110,9 @@ type Responses struct {
 	Advice04         string `mapstructure:"advice04"`
 	Promo            string `mapstructure:"promo"`
 	PromoOK          string `mapstructure:"promo_ok"`
-	CreatePromo01    string `mapstructure:"create_promo01"`
-	CreatePromo02    string `mapstructure:"create_promo02"`
-	CreatePromo03    string `mapstructure:"create_promo03"`
+	CreateRef01    string `mapstructure:"create_ref01"`
+	CreateRef02    string `mapstructure:"create_ref02"`
+	CreateRef03    string `mapstructure:"create_ref03"`
 }
 
 type Errors struct {
@@ -129,24 +130,20 @@ type Errors struct {
 type Keyboard struct {
 	Menu    Menu
 	Balance Balance
-	Promo   PromoMsg
 	Advices Advices
 }
 
 type Menu struct {
 	Help           string `mapstructure:"help"`
 	Balance        string `mapstructure:"balance"`
-	Promo          string `mapstructure:"promo"`
+	Ref            string `mapstructure:"ref"`
 	ImageRecognize string `mapstructure:"image_recognize"`
 	SolveTask      string `mapstructure:"solve_task"`
 }
 
 type Balance struct {
 	Buy string `mapstructure:"buy"`
-}
-
-type PromoMsg struct {
-	CreatePromo string `mapstructure:"create_promo"`
+	Ref string `mapstructure:"ref"`
 }
 
 type Advices struct {
@@ -166,6 +163,7 @@ type Commands struct {
 	DeleteUrl    string `mapstructure:"delete_url"`
 	SendAll      string `mapstructure:"send_all"`
 	SendAllBuy   string `mapstructure:"send_all_buy"`
+	SendAllRef   string `mapstructure:"send_all_ref"`
 	SendAllZeros string `mapstructure:"send_all_zeros"`
 	SetSales     string `mapstructure:"set_sales"`
 	GetSales     string `mapstructure:"get_sales"`
@@ -269,11 +267,6 @@ func unmarshal(cfg *Config) error {
 	}
 
 	err = viper.UnmarshalKey("bot.keyboard.advices", &cfg.Bot.Keyboard.Advices)
-	if err != nil {
-		return err
-	}
-
-	err = viper.UnmarshalKey("bot.keyboard.promo", &cfg.Bot.Keyboard.Promo)
 	if err != nil {
 		return err
 	}

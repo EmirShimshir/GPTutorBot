@@ -9,7 +9,7 @@ func (b *Bot) NewMenuKeyboard() tgbotapi.ReplyKeyboardMarkup {
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(b.cfg.Keyboard.Menu.Help),
 			tgbotapi.NewKeyboardButton(b.cfg.Keyboard.Menu.Balance),
-			tgbotapi.NewKeyboardButton(b.cfg.Keyboard.Menu.Promo),
+			tgbotapi.NewKeyboardButton(b.cfg.Keyboard.Menu.Ref),
 		),
 		tgbotapi.NewKeyboardButtonRow(
 			tgbotapi.NewKeyboardButton(b.cfg.Keyboard.Menu.ImageRecognize),
@@ -40,6 +40,9 @@ func (b *Bot) NewBalanceKeyboard() tgbotapi.InlineKeyboardMarkup {
 		tgbotapi.NewInlineKeyboardRow(
 			tgbotapi.NewInlineKeyboardButtonData(b.cfg.Keyboard.Balance.Buy, b.cfg.Keyboard.Balance.Buy),
 		),
+			tgbotapi.NewInlineKeyboardRow(
+			tgbotapi.NewInlineKeyboardButtonData(b.cfg.Keyboard.Balance.Ref, b.cfg.Keyboard.Balance.Ref),
+		),
 	)
 }
 
@@ -51,18 +54,18 @@ func (b *Bot) NewSalesKeyboard() tgbotapi.InlineKeyboardMarkup {
 	)
 }
 
-func (b *Bot) NewAdviceKeyboard() tgbotapi.InlineKeyboardMarkup {
+func (b *Bot) NewRefKeyboard() tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(b.cfg.Keyboard.Advices.Advice, b.cfg.Keyboard.Advices.Advice),
+			tgbotapi.NewInlineKeyboardButtonData(b.cfg.Keyboard.Balance.Ref, b.cfg.Keyboard.Balance.Ref),
 		),
 	)
 }
 
-func (b *Bot) NewPromoKeyboard() tgbotapi.InlineKeyboardMarkup {
+func (b *Bot) NewAdviceKeyboard() tgbotapi.InlineKeyboardMarkup {
 	return tgbotapi.NewInlineKeyboardMarkup(
 		tgbotapi.NewInlineKeyboardRow(
-			tgbotapi.NewInlineKeyboardButtonData(b.cfg.Keyboard.Promo.CreatePromo, b.cfg.Keyboard.Promo.CreatePromo),
+			tgbotapi.NewInlineKeyboardButtonData(b.cfg.Keyboard.Advices.Advice, b.cfg.Keyboard.Advices.Advice),
 		),
 	)
 }

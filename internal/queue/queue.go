@@ -40,7 +40,7 @@ func (q *Queue) GetAll() []any {
 	return res
 }
 
-func (q *Queue) RemoveToken(v any) error {
+func (q *Queue) Remove(v any) error {
 	for e := q.List.Front(); e != nil; e = e.Next() {
 		if e.Value == v {
 			q.List.Remove(e)
