@@ -7,6 +7,7 @@ import (
 	"github.com/EmirShimshir/tasker-bot/internal/service"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 func (b *Bot) handleText(text string, chatID int64) error {
@@ -35,14 +36,28 @@ func (b *Bot) handleText(text string, chatID int64) error {
 	return b.handleRawText(text, chatID)
 }
 
-func (b *Bot) handleRawText(text string, chatID int64) error {
-	action := tgbotapi.ChatActionConfig{tgbotapi.BaseChat{ChatID: chatID}, "typing"}
-	_, err := b.botApi.Request(action)
-	if err != nil {
-		return err
+func (b *Bot) typeWhileChannelOpen(stopCh <-chan struct{}, chatID int64) {
+	for {
+		select {
+		case <-stopCh:
+			return
+		default:
+			action := tgbotapi.ChatActionConfig{BaseChat: tgbotapi.BaseChat{ChatID: chatID}, Action: "typing"}
+			_, _ = b.botApi.Request(action)
+			time.Sleep(5 * time.Second)
+		}
+
 	}
+}
+
+func (b *Bot) handleRawText(text string, chatID int64) error {
+	stopCh := make(chan struct{})
+
+	go b.typeWhileChannelOpen(stopCh, chatID)
 
 	result, err := b.services.ProcessTask(text, chatID)
+	stopCh <- struct{}{}
+
 	if errors.Is(err, chatAI.ErrGptResult) || errors.Is(err, chatAI.GptNewToken) {
 		AdminText := ""
 		if errors.Is(err, chatAI.ErrGptResult) {
