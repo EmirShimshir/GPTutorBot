@@ -431,7 +431,7 @@ func (b *Bot) handleRemoveTokenCommand(chatID int64, text string) error {
 
 	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.RemoveToken), "", 1)
 
-	return	b.services.RemoveToken(text)
+	return b.services.RemoveToken(text)
 }
 
 func (b *Bot) handleNextTokenCommand(chatID int64) error {
@@ -443,8 +443,6 @@ func (b *Bot) handleNextTokenCommand(chatID int64) error {
 
 	return nil
 }
-
-
 
 func (b *Bot) isAdmin(chatID int64) bool {
 	for _, adminId := range b.cfg.AdminsId {

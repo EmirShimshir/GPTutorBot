@@ -47,24 +47,26 @@ func (b *Bot) Start() error {
 	//updates := b.botApi.GetUpdatesChan(u)
 
 	for update := range updates {
-		if update.Message != nil {
-			if update.Message.IsCommand() {
-				err := b.handleCommand(update.Message)
-				if err != nil {
-					b.handleError(update.Message.Chat.ID, err)
+		go func(update tgbotapi.Update) {
+			if update.Message != nil {
+				if update.Message.IsCommand() {
+					err := b.handleCommand(update.Message)
+					if err != nil {
+						b.handleError(update.Message.Chat.ID, err)
+					}
+				} else {
+					err := b.handleMessage(update.Message)
+					if err != nil {
+						b.handleError(update.Message.Chat.ID, err)
+					}
 				}
-			} else {
-				err := b.handleMessage(update.Message)
+			} else if update.CallbackQuery != nil {
+				err := b.handleCallback(update.CallbackQuery)
 				if err != nil {
-					b.handleError(update.Message.Chat.ID, err)
+					b.handleError(update.CallbackQuery.Message.Chat.ID, err)
 				}
 			}
-		} else if update.CallbackQuery != nil {
-			err := b.handleCallback(update.CallbackQuery)
-			if err != nil {
-				b.handleError(update.CallbackQuery.Message.Chat.ID, err)
-			}
-		}
+		}(update)
 	}
 
 	return nil
