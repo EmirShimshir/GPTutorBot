@@ -2,7 +2,7 @@ package service
 
 import (
 	"errors"
-	"github.com/EmirShimshir/tasker-bot/internal/openai"
+	"github.com/EmirShimshir/tasker-bot/internal/chatAI"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"os"
@@ -28,7 +28,7 @@ func (s *Service) ProcessTask(text string, chatID int64) (string, error) {
 	}
 
 	result, err := s.chatGpt.MakeRequest(text)
-	if err != nil && !errors.Is(err, openai.ErrGptResult) && !errors.Is(err, openai.GptNewToken) {
+	if err != nil && !errors.Is(err, chatAI.ErrGptResult) && !errors.Is(err, chatAI.GptNewToken) {
 		return "", err
 	} else {
 		resErr = err

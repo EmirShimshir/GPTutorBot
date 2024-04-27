@@ -12,7 +12,7 @@ type Config struct {
 	Promo     Promo
 	Payment   Payment
 	Tesseract Tesseract
-	ChatGpt   ChatGpt
+	ChatAI   ChatAI
 	Bot       Bot
 	Server    Server
 }
@@ -48,8 +48,8 @@ type Tesseract struct {
 	NlpLanguages []string `mapstructure:"nlp_languages"`
 }
 
-type ChatGpt struct {
-	ContentStart string `mapstructure:"content_start"`
+type ChatAI struct {
+	RoleContent string `mapstructure:"role_content"`
 }
 
 type Bot struct {
@@ -236,7 +236,7 @@ func unmarshal(cfg *Config) error {
 		return err
 	}
 
-	err = viper.UnmarshalKey("chat_gpt", &cfg.ChatGpt)
+	err = viper.UnmarshalKey("chat_ai", &cfg.ChatAI)
 	if err != nil {
 		return err
 	}

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/EmirShimshir/tasker-bot/internal/chatAI"
 	"github.com/EmirShimshir/tasker-bot/internal/config"
-	"github.com/EmirShimshir/tasker-bot/internal/openai"
 	"github.com/EmirShimshir/tasker-bot/internal/repository"
 	"github.com/EmirShimshir/tasker-bot/internal/server"
 	"github.com/EmirShimshir/tasker-bot/internal/service"
@@ -74,7 +74,7 @@ func main() {
 	defer nlp.CloseClient()
 	log.Info("nlp initialized")
 
-	chatGpt := openai.NewChatGpt(cfg.ChatGptApiKey, cfg.ChatGpt)
+	chatGpt := chatAI.NewChatGpt(cfg.ChatGptApiKey, cfg.ChatGpt)
 	log.Info("chatGpt initialized")
 
 	services := service.NewService(nlp, chatGpt, cfg.Payment, cfg.Promo, repo)

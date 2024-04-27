@@ -12,8 +12,8 @@ promo:
 tesseract:
   nlp_languages: ["rus", "eng"]
 
-chat_gpt:
-  content_start: ""
+chat_ai:
+  role_content: "Ты виртуальный помощник для решения задач, тебя зовут GPTutor, по умолчанию отвечай на русском языке"
 
 payment:
   message: "Количество месяцев: %d, цена: %dр"

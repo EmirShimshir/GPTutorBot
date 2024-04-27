@@ -3,7 +3,7 @@ package telegram
 import (
 	"errors"
 	"fmt"
-	"github.com/EmirShimshir/tasker-bot/internal/openai"
+	"github.com/EmirShimshir/tasker-bot/internal/chatAI"
 	"github.com/EmirShimshir/tasker-bot/internal/service"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
@@ -43,9 +43,9 @@ func (b *Bot) handleRawText(text string, chatID int64) error {
 	}
 
 	result, err := b.services.ProcessTask(text, chatID)
-	if errors.Is(err, openai.ErrGptResult) || errors.Is(err, openai.GptNewToken) {
+	if errors.Is(err, chatAI.ErrGptResult) || errors.Is(err, chatAI.GptNewToken) {
 		AdminText := ""
-		if errors.Is(err, openai.ErrGptResult) {
+		if errors.Is(err, chatAI.ErrGptResult) {
 			AdminText = fmt.Sprintf("ALERT: %s", err.Error())
 		} else {
 			AdminText = fmt.Sprintf("INFO: %s", err.Error())
