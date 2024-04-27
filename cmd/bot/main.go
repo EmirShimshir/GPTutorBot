@@ -74,10 +74,10 @@ func main() {
 	defer nlp.CloseClient()
 	log.Info("nlp initialized")
 
-	chatGpt := chatAI.NewChatGpt(cfg.ChatGptApiKey, cfg.ChatGpt)
+	ChatAI := chatAI.NewChatAI(cfg.ChatGptApiKey, cfg.ChatAI)
 	log.Info("chatGpt initialized")
 
-	services := service.NewService(nlp, chatGpt, cfg.Payment, cfg.Promo, repo)
+	services := service.NewService(nlp, ChatAI, cfg.Payment, cfg.Promo, repo)
 	log.Info("services initialized")
 
 	bot := telegram.NewBot(botApi, services, cfg.Bot)

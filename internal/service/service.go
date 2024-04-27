@@ -9,13 +9,13 @@ import (
 
 type Service struct {
 	nlp     *tesseract.Nlp
-	chatGpt *chatAI.ChatGpt
+	chatGpt *chatAI.ChatAI
 	payment config.Payment
 	promo   config.Promo
 	repo    *repository.Repositories
 }
 
-func NewService(nlp *tesseract.Nlp, chatGpt *chatAI.ChatGpt, payment config.Payment, promo config.Promo, repo *repository.Repositories) *Service {
+func NewService(nlp *tesseract.Nlp, chatGpt *chatAI.ChatAI, payment config.Payment, promo config.Promo, repo *repository.Repositories) *Service {
 	return &Service{
 		nlp:     nlp,
 		chatGpt: chatGpt,

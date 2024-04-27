@@ -13,22 +13,22 @@ import (
 var ErrGptResult = errors.New("error chatAI result")
 var GptNewToken = errors.New("gpt chatAI token")
 
-type ChatGpt struct {
+type ChatAI struct {
 	client       port.ClientAI
 	queue port.Queue
 }
 
-func NewChatGpt(token string, cfg config.ChatAI) *ChatGpt {
+func NewChatAI(token string, cfg config.ChatAI) *ChatAI {
 	t := port.NewToken(token, nil)
 	q := qList.NewQList()
 	q.Add(t)
-	return &ChatGpt{
+	return &ChatAI{
 		client:   deepSeek.NewDeepSeek(cfg.RoleContent, q.Get().Value),
 		queue: q,
 	}
 }
 
-func (c *ChatGpt) GetTokensAll() []string {
+func (c *ChatAI) GetTokensAll() []string {
 	res := make([]string, 0, 1)
 	tokens := c.queue.GetAll()
 	for i, el := range tokens {
@@ -42,14 +42,14 @@ func (c *ChatGpt) GetTokensAll() []string {
 	return res
 }
 
-func (c *ChatGpt) AddToken(token string) {
+func (c *ChatAI) AddToken(token string) {
 
 	t := port.NewToken(token, nil)
 	c.queue.Add(t)
 	c.client.NewToken(c.queue.Get().Value)
 }
 
-func (c *ChatGpt) RemoveToken(token string) error {
+func (c *ChatAI) RemoveToken(token string) error {
 	err := c.queue.Remove(token)
 	if err != nil {
 		return err
@@ -59,13 +59,13 @@ func (c *ChatGpt) RemoveToken(token string) error {
 	return nil
 }
 
-func (c *ChatGpt) NextToken() {
+func (c *ChatAI) NextToken() {
 
 	c.queue.Next()
 	c.client.NewToken(c.queue.Get().Value)
 }
 
-func (c *ChatGpt) MakeRequest(message string) (string, error) {
+func (c *ChatAI) MakeRequest(message string) (string, error) {
 	res, err := c.client.CreateChatCompletion(message)
 	c.queue.Get().CntReq++
 	if err != nil {

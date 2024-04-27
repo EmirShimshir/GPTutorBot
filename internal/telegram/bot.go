@@ -36,7 +36,6 @@ func (b *Bot) Start() error {
 	updates := b.botApi.ListenForWebhook(fmt.Sprintf("/%s", b.botApi.Token))
 	go http.ListenAndServeTLS(fmt.Sprintf(":%d", b.cfg.Port), b.cfg.CertPath, b.cfg.KeyPath, nil)
 
-
 	//_, err := b.botApi.Request(tgbotapi.DeleteWebhookConfig{})
 	//if err != nil {
 	//	return err
