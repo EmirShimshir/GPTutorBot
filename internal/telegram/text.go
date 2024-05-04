@@ -43,7 +43,14 @@ func (b *Bot) typeWhileChannelOpen(stopCh <-chan struct{}, chatID int64) {
 			return
 		default:
 			action := tgbotapi.ChatActionConfig{BaseChat: tgbotapi.BaseChat{ChatID: chatID}, Action: "typing"}
-			_, _ = b.botApi.Request(action)
+			_, err := b.botApi.Request(action)
+			if err != nil {
+				log.WithFields(log.Fields{
+					"chatID": chatID,
+					"err":    err,
+				}).Error("typeWhileChannelOpen")
+				return
+			}
 			time.Sleep(5 * time.Second)
 		}
 

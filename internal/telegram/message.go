@@ -27,11 +27,8 @@ func (b *Bot) handleFile(fileConfig tgbotapi.FileConfig, chatID int64) error {
 		"chatID": chatID,
 	}).Info("new file")
 
-	action := tgbotapi.ChatActionConfig{tgbotapi.BaseChat{ChatID: chatID}, "typing"}
-	_, err := b.botApi.Request(action)
-	if err != nil {
-		return err
-	}
+	stopCh := make(chan struct{})
+	go b.typeWhileChannelOpen(stopCh, chatID)
 
 	tgFile, err := b.botApi.GetFile(fileConfig)
 	if err != nil {
@@ -44,6 +41,8 @@ func (b *Bot) handleFile(fileConfig tgbotapi.FileConfig, chatID int64) error {
 	if err != nil {
 		return err
 	}
+
+	stopCh <- struct{}{}
 
 	msg := tgbotapi.NewMessage(chatID, text)
 	_, err = b.botApi.Send(msg)

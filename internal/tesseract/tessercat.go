@@ -7,17 +7,20 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"sync"
 )
 
 type Nlp struct {
 	client    *gosseract.Client
 	languages []string
+	mutex     *sync.Mutex
 }
 
 func NewNlp(cfg config.Tesseract) *Nlp {
 	return &Nlp{
 		client:    gosseract.NewClient(),
 		languages: cfg.NlpLanguages,
+		mutex:     &sync.Mutex{},
 	}
 }
 
@@ -32,6 +35,7 @@ func (n *Nlp) TextRecognition(urlFile string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
 	defer file.Close()
 	defer os.Remove(file.Name())
 
@@ -50,10 +54,14 @@ func (n *Nlp) TextRecognition(urlFile string) (string, error) {
 		return "", err
 	}
 
+	n.mutex.Lock()
+	log.WithFields(log.Fields{}).Info("start text")
 	text, err := n.client.Text()
 	if err != nil {
 		return "", err
 	}
+	log.WithFields(log.Fields{}).Info("end text")
+	n.mutex.Unlock()
 
 	return text, nil
 }

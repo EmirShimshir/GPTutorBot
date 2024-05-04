@@ -52,12 +52,12 @@ func (s *Service) ActivateRef(text string, chatID int64) (int64, string, error) 
 		return 0, "", PromoError
 	}
 
-	err = s.UpdateSubscriptionDays(chatID, 7)
+	err = s.UpdateSubscriptionDays(chatID, 3)
 	if err != nil {
 		return 0, "", err
 	}
 
-	err = s.UpdateSubscriptionDays(chatIdAuthor, 7)
+	err = s.UpdateSubscriptionDays(chatIdAuthor, 3)
 	if err != nil {
 		return 0, "", err
 	}
