@@ -6,6 +6,7 @@ import (
 	"github.com/EmirShimshir/tasker-bot/internal/service"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"net/http"
+	"strings"
 )
 
 type Bot struct {
@@ -49,7 +50,7 @@ func (b *Bot) Start() error {
 	for update := range updates {
 		go func(update tgbotapi.Update) {
 			if update.Message != nil {
-				if update.Message.IsCommand() {
+				if b.IsCommand(update.Message) {
 					err := b.handleCommand(update.Message)
 					if err != nil {
 						b.handleError(update.Message.Chat.ID, err)
@@ -70,4 +71,23 @@ func (b *Bot) Start() error {
 	}
 
 	return nil
+}
+
+func (b *Bot) IsCommand(message *tgbotapi.Message) bool {
+	text := message.Text
+	if text == "" {
+		text = message.Caption
+	}
+	return strings.HasPrefix(text, "/")
+}
+
+func (b *Bot) Command(message *tgbotapi.Message) string {
+	text := message.Text
+	if text == "" {
+		text = message.Caption
+	}
+
+	command := strings.TrimPrefix(text, "/")
+	res := strings.Fields(command)
+	return res[0]
 }

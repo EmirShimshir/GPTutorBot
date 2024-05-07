@@ -13,7 +13,7 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		"command": message.Command(),
 	}).Info("new command")
 
-	switch message.Command() {
+	switch b.Command(message) {
 	case b.cfg.Commands.Start:
 		return b.handleStartCommand(message.Chat.ID, message.From.UserName, message.Text)
 	case b.cfg.Commands.Help:
@@ -54,6 +54,8 @@ func (b *Bot) handleCommand(message *tgbotapi.Message) error {
 		return b.handleRemoveTokenCommand(message.Chat.ID, message.Text)
 	case b.cfg.Commands.NextToken:
 		return b.handleNextTokenCommand(message.Chat.ID)
+	case b.cfg.Commands.SendAllAd:
+		return b.handleSendAllAdCommand(message.Chat.ID, message.Caption, message.Photo)
 	default:
 		return invalidCommandError
 	}
@@ -81,7 +83,7 @@ func (b *Bot) handleStartCommand(chatID int64, userName string, text string) err
 			return err
 		}
 		if b.services.IsRef(text) {
-			refStart, err :=  b.handleActivateRef(text, chatID)
+			refStart, err := b.handleActivateRef(text, chatID)
 			if err != nil {
 				return err
 			}
@@ -92,7 +94,6 @@ func (b *Bot) handleStartCommand(chatID int64, userName string, text string) err
 			return err
 		}
 	}
-
 
 	msg := tgbotapi.NewMessage(chatID, b.cfg.Messages.Responses.Start)
 	msg.ParseMode = "Markdown"

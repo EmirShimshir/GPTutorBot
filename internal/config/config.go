@@ -12,7 +12,7 @@ type Config struct {
 	Promo     Promo
 	Payment   Payment
 	Tesseract Tesseract
-	ChatAI   ChatAI
+	ChatAI    ChatAI
 	Bot       Bot
 	Server    Server
 }
@@ -23,7 +23,7 @@ type Repo struct {
 }
 
 type Promo struct {
-	BotName string `mapstructure:"bot_name"`
+	BotName        string `mapstructure:"bot_name"`
 	Gift           string `mapstructure:"gift"`
 	Start          string `mapstructure:"start"`
 	CountReqFriend int64  `mapstructure:"count_req_friend"`
@@ -110,9 +110,9 @@ type Responses struct {
 	Advice04         string `mapstructure:"advice04"`
 	Promo            string `mapstructure:"promo"`
 	PromoOK          string `mapstructure:"promo_ok"`
-	CreateRef01    string `mapstructure:"create_ref01"`
-	CreateRef02    string `mapstructure:"create_ref02"`
-	CreateRef03    string `mapstructure:"create_ref03"`
+	CreateRef01      string `mapstructure:"create_ref01"`
+	CreateRef02      string `mapstructure:"create_ref02"`
+	CreateRef03      string `mapstructure:"create_ref03"`
 }
 
 type Errors struct {
@@ -167,10 +167,11 @@ type Commands struct {
 	SendAllZeros string `mapstructure:"send_all_zeros"`
 	SetSales     string `mapstructure:"set_sales"`
 	GetSales     string `mapstructure:"get_sales"`
-	GetTokens	 string `mapstructure:"get_tokens"`
-	AddToken	 string `mapstructure:"add_tokens"`
-	RemoveToken string `mapstructure:"remove_tokens"`
-	NextToken string `mapstructure:"next_tokens"`
+	GetTokens    string `mapstructure:"get_tokens"`
+	AddToken     string `mapstructure:"add_tokens"`
+	RemoveToken  string `mapstructure:"remove_tokens"`
+	NextToken    string `mapstructure:"next_tokens"`
+	SendAllAd    string `mapstructure:"send_all_ad"`
 }
 
 type Server struct {

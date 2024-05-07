@@ -452,3 +452,61 @@ func (b *Bot) isAdmin(chatID int64) bool {
 	}
 	return false
 }
+
+func (b *Bot) handleSendAllAdCommand(chatID int64, text string, photo []tgbotapi.PhotoSize) error {
+	if !b.isAdmin(chatID) {
+		return invalidCommandError
+	}
+	if len(photo) == 0 {
+		log.WithFields(log.Fields{
+			"photo": len(photo),
+		}).Info("handleSendAllAdCommand")
+		return invalidMessageError
+	}
+
+	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SendAllAd), "", 1)
+
+	// send to admin
+	ad := tgbotapi.NewPhoto(chatID, tgbotapi.FileID(photo[0].FileID))
+	ad.Caption = text
+	ad.ParseMode = "Markdown"
+	_, err := b.botApi.Send(ad)
+	if err != nil {
+		log.Error(fmt.Sprintf("err SendAllAd to id: %d", chatID), err)
+	}
+	log.WithFields(log.Fields{
+		"chatID": chatID,
+		"status": "OK",
+	}).Info("handleSendAllAdCommand to admin")
+
+	chatIDs, err := b.services.GetUsersNotSubChatID()
+	if err != nil {
+		return err
+	}
+
+	// send all
+	cntOk, cntErr := 0, 0
+	for _, chatID := range chatIDs {
+		ad := tgbotapi.NewPhoto(chatID, tgbotapi.FileID(photo[0].FileID))
+		ad.Caption = text
+		ad.ParseMode = "Markdown"
+		_, err = b.botApi.Send(ad)
+		if err != nil {
+			cntErr++
+			log.Error(fmt.Sprintf("err SendAllAd to id: %d", chatID), err)
+		} else {
+			cntOk++
+			log.WithFields(log.Fields{
+				"chatID": chatID,
+				"status": "OK",
+			}).Info("handleSendAllAdCommand")
+		}
+	}
+
+	log.WithFields(log.Fields{
+		"status":  "done",
+		"cnt_ok":  cntOk,
+		"cnt_err": cntErr,
+	}).Info("handleSendAllAdCommand")
+	return nil
+}

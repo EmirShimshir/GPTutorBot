@@ -196,7 +196,7 @@ func (s *Service) GetUsersAllChatID() ([]int64, error) {
 }
 
 func (s *Service) GetUsersZeroChatID() ([]int64, error) {
-	log.Info("GetAllChatID")
+	log.Info("GetUsersZeroChatID")
 
 	usersAll, err := s.repo.Users.GetAll()
 	if err != nil {
@@ -216,6 +216,28 @@ func (s *Service) GetUsersZeroChatID() ([]int64, error) {
 					return nil, err
 				}
 			}
+			ChatIDs = append(ChatIDs, usersAll[i].ChatID)
+		}
+	}
+
+	return ChatIDs, nil
+}
+
+func (s *Service) GetUsersNotSubChatID() ([]int64, error) {
+	log.Info("GetUsersNotSubChatID")
+
+	usersAll, err := s.repo.Users.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	ChatIDs := make([]int64, 0, 1)
+
+	now := time.Now()
+
+	for i := 0; i < len(usersAll); i++ {
+		diff := now.Sub(usersAll[i].DateSub)
+		if diff > 0 {
 			ChatIDs = append(ChatIDs, usersAll[i].ChatID)
 		}
 	}

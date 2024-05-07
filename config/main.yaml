@@ -256,6 +256,7 @@ bot:
     add_tokens: "addToken"
     remove_tokens: "removeToken"
     next_tokens: "nextToken"
+    send_all_ad: "sendAllAd"
 
 server:
   port: 80
