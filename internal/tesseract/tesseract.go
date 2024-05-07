@@ -58,6 +58,7 @@ func (n *Nlp) TextRecognition(urlFile string) (string, error) {
 	log.WithFields(log.Fields{}).Info("start text")
 	text, err := n.client.Text()
 	if err != nil {
+		n.mutex.Unlock()
 		return "", err
 	}
 	log.WithFields(log.Fields{}).Info("end text")
