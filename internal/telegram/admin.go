@@ -464,7 +464,7 @@ func (b *Bot) handleSendAllAdCommand(chatID int64, text string, photo []tgbotapi
 		return invalidMessageError
 	}
 
-	text = strings.Replace(text, fmt.Sprintf("/%s ", b.cfg.Commands.SendAllAd), "", 1)
+	text = strings.TrimPrefix(text, fmt.Sprintf("/%s", b.cfg.Commands.SendAllAd))
 
 	// send to admin
 	ad := tgbotapi.NewPhoto(chatID, tgbotapi.FileID(photo[0].FileID))

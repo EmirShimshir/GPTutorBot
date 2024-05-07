@@ -134,7 +134,8 @@ bot:
         /sendAll message [*blod*] [_italics_] [[text](url)] 
         /sendAllBuy message [*blod*] [_italics_] [[text](url)] 
         /sendAllRef message [*blod*] [_italics_] [[text](url)] 
-        /sendAllZeros message [*blod*] [_italics_] [[text](url)] 
+        /sendAllZeros message [*blod*] [_italics_] [[text](url)]
+        /sendAllAd message [*blod*] [_italics_] [[text](url)]
         
         /setSales count
         /getSales
