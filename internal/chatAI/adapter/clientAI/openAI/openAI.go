@@ -6,22 +6,26 @@ import (
 )
 
 type OpenAI struct {
+	BaseUrl     string
 	RoleContent string
-	Token string
+	Token       string
 }
 
-func NewOpenAI(roleContent, token string) *OpenAI {
+func NewOpenAI(baseUrl, roleContent, token string) *OpenAI {
 	return &OpenAI{
+		BaseUrl:     baseUrl,
 		RoleContent: roleContent,
-		Token: token,
+		Token:       token,
 	}
 }
 
 func (o *OpenAI) CreateChatCompletion(msg string) (string, error) {
-	c := openai.NewClient(o.Token)
+	config := openai.DefaultConfig(o.Token)
+	config.BaseURL = o.BaseUrl
+	c := openai.NewClientWithConfig(config)
 
 	req := openai.ChatCompletionRequest{
-		Model: openai.GPT3Dot5Turbo,
+		Model: openai.GPT4,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,

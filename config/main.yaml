@@ -13,7 +13,8 @@ tesseract:
   nlp_languages: ["rus", "eng"]
 
 chat_ai:
-  role_content: "Ты виртуальный помощник для решения задач, тебя зовут GPTutor, по умолчанию отвечай на русском языке"
+  base_url: "https://api.aiguoguo199.com"
+  role_content: "Ты виртуальный помощник для решения задач, тебя зовут GPTutor"
 
 payment:
   message: "Количество месяцев: %d, цена: %dр"

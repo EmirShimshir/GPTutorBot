@@ -3,7 +3,7 @@ package chatAI
 import (
 	"errors"
 	"fmt"
-	"github.com/EmirShimshir/tasker-bot/internal/chatAI/adapter/clientAI/deepSeek"
+	"github.com/EmirShimshir/tasker-bot/internal/chatAI/adapter/clientAI/openAI"
 	"github.com/EmirShimshir/tasker-bot/internal/chatAI/adapter/queue/qList"
 	"github.com/EmirShimshir/tasker-bot/internal/chatAI/port"
 	"github.com/EmirShimshir/tasker-bot/internal/config"
@@ -14,8 +14,8 @@ var ErrGptResult = errors.New("error chatAI result")
 var GptNewToken = errors.New("gpt chatAI token")
 
 type ChatAI struct {
-	client       port.ClientAI
-	queue port.Queue
+	client port.ClientAI
+	queue  port.Queue
 }
 
 func NewChatAI(token string, cfg config.ChatAI) *ChatAI {
@@ -23,8 +23,8 @@ func NewChatAI(token string, cfg config.ChatAI) *ChatAI {
 	q := qList.NewQList()
 	q.Add(t)
 	return &ChatAI{
-		client:   deepSeek.NewDeepSeek(cfg.RoleContent, q.Get().Value),
-		queue: q,
+		client: openAI.NewOpenAI(cfg.BaseUrl, cfg.RoleContent, q.Get().Value),
+		queue:  q,
 	}
 }
 
@@ -36,7 +36,7 @@ func (c *ChatAI) GetTokensAll() []string {
 		if el.Err != nil {
 			errRes = el.Err.Error()
 		}
-		res = append(res, fmt.Sprintf("%d) TOKEN: %s; ERROR: %s; CNTREQ: %d\n", len(tokens) - i, el.Value, errRes, el.CntReq))
+		res = append(res, fmt.Sprintf("%d) TOKEN: %s; ERROR: %s; CNTREQ: %d\n", len(tokens)-i, el.Value, errRes, el.CntReq))
 	}
 
 	return res
@@ -74,7 +74,7 @@ func (c *ChatAI) MakeRequest(message string) (string, error) {
 
 		log.WithFields(log.Fields{
 			"token": token.Value,
-			"err": token.Err,
+			"err":   token.Err,
 		}).Info("ChatGPT token error INFO")
 
 		c.queue.Next()
@@ -97,7 +97,7 @@ func (c *ChatAI) MakeRequest(message string) (string, error) {
 		}
 		log.WithFields(log.Fields{
 			"token": token.Value,
-			"err": token.Err,
+			"err":   token.Err,
 		}).Info("ChatGPT token error ALERT")
 
 		return "", ErrGptResult

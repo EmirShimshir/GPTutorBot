@@ -49,6 +49,7 @@ type Tesseract struct {
 }
 
 type ChatAI struct {
+	BaseUrl     string `mapstructure:"base_url"`
 	RoleContent string `mapstructure:"role_content"`
 }
 
